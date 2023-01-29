@@ -6,6 +6,7 @@ const computerScore_span = document.getElementById("computerScore");
 const rock_div = document.getElementById("r");
 const paper_div = document.getElementById("p");
 const scissor_div = document.getElementById("s");
+const refreshButton = document.querySelector('.refreshButton')
 
 function getComputerChoice () {
     const choices = ['r', 'p', 's'];
@@ -26,10 +27,8 @@ function win (userChoice, computerChoice) {
     userScore_span.textContent = userScore;
     computerScore_span.textContent = computerScore;
     result_p.textContent = `${convertToWord(userChoice)} eats ${convertToWord(computerChoice)} . You win!`;
-
     if (userScore === 5) {
-        reloadPage();
-        console.log('user score is ', userScore)
+        refreshButton.style.display = "block";
     }
 
 }
@@ -43,8 +42,8 @@ function lose (userChoice, computerChoice) {
     result_p.textContent = `${convertToWord(computerChoice)} eats ${convertToWord(userChoice)} . You lose!`;
 
     if (computerScore == 5) {
-        reloadPage()
-       }
+        refreshButton.style.display = "block";
+    }
 }
 
 function draw () {
@@ -54,6 +53,7 @@ function draw () {
 
 
     function game (userChoice) {
+        if (userScore === 5 || computerScore === 5) return;
     const computerChoice = getComputerChoice();
 switch (userChoice + computerChoice) {
     case "rs":
@@ -84,6 +84,7 @@ function reloadPage(){
 
 
 function main () {
+
 rock_div.addEventListener('click', function () {
     game("r");    
 });
@@ -96,4 +97,6 @@ scissor_div.addEventListener('click', function () {
     game("s");
 });
 }
+
+refreshButton.addEventListener('click', reloadPage)
 main();
