@@ -1,43 +1,99 @@
-const message = document.querySelector('.message');
+let userScore = 0;
 let computerScore = 0;
-let playerScore = 0;
+const result_p = document.querySelector(".result > p");
+const userScore_span = document.getElementById("userScore");
+const computerScore_span = document.getElementById("computerScore");
+const rock_div = document.getElementById("r");
+const paper_div = document.getElementById("p");
+const scissor_div = document.getElementById("s");
 
+function getComputerChoice () {
+    const choices = ['r', 'p', 's'];
+    const randomNumber = Math.floor(Math.random() * 3)
+    return choices[randomNumber];
+}
 
-function computerPlay () {
-    let computerChoice =  Math.floor(Math.random() * 3);
-    let result;
-    if (computerChoice == 0) {
-        result = 'rock';
-    } else if (computerChoice == 1) {
-        result = 'paper';
-    } else {
-        result = 'scissor';
-    } return result;
+function convertToWord(letter) {
+    if (letter === "p") return "Paper";
+    if (letter === "r") return "Rock";
+    return "Scissors";
+}
+
+function win (userChoice, computerChoice) {
+    
+
+    userScore++;
+    userScore_span.textContent = userScore;
+    computerScore_span.textContent = computerScore;
+    result_p.textContent = `${convertToWord(userChoice)} eats ${convertToWord(computerChoice)} . You win!`;
+
+    if (userScore === 5) {
+        reloadPage();
+        console.log('user score is ', userScore)
     }
 
-    function playRound (playerChoice, computerChoice) {
-        if ((playerChoice === 'rock' && computerChoice === 'rock') ||
-        (playerChoice === 'paper' && computerChoice === 'paper') ||
-        (playerChoice === 'scissor' && computerChoice === 'scissor')) {
-            message.textContent = `It's a draw! Computer score: ${computerScore} PlayerScore: ${playerScore}`;
-        } else if ((playerChoice === 'rock' && computerChoice === 'paper') ||
-            (playerChoice === 'paper' && computerChoice === 'scissor') ||
-            (playerChoice === 'scissor' && computerChoice === 'rock')) {
-                message.textContent = `You lose! Computer score: ${computerScore} PlayerScore: ${playerScore}`;
-                computerScore++;
-        } else {
-            message.textContent = `You win! Computer score: ${computerScore} PlayerScore: ${playerScore}`;
-            playerScore++;
-        }
+}
+
+function lose (userChoice, computerChoice) {
+   
+
+    computerScore++;
+    userScore_span.textContent = userScore;
+    computerScore_span.textContent = computerScore;
+    result_p.textContent = `${convertToWord(computerChoice)} eats ${convertToWord(userChoice)} . You lose!`;
+
+    if (computerScore == 5) {
+        reloadPage()
+       }
+}
+
+function draw () {
+    result_p.textContent = `It's a draw!`
     }
 
-    function play (playerChoice) {
-        let computerChoice;
-        for (let i = 0; i < 5; i++){
-        playerChoice = prompt("Rock, Paper, or Scissors?").toLowerCase();
-        computerChoice = computerPlay();
-        playRound(playerChoice, computerChoice);
-    }
-    }
 
-    play();
+
+    function game (userChoice) {
+    const computerChoice = getComputerChoice();
+switch (userChoice + computerChoice) {
+    case "rs":
+    case "sp":
+    case "pr":
+        win(userChoice, computerChoice, userScore_span);
+        break;
+    case "sr":
+    case "ps":
+    case "rp":
+        lose(userChoice, computerChoice, computerScore_span);
+        break;
+    case "rr":
+    case "ss":
+    case "pp":
+        draw();
+        break;
+        
+        default:
+            gameOver();
+}
+}
+
+function reloadPage(){
+    window.location.reload();
+ }
+
+
+
+function main () {
+rock_div.addEventListener('click', function () {
+    game("r");    
+});
+
+paper_div.addEventListener('click', function () {
+    game("p");
+});
+
+scissor_div.addEventListener('click', function () {
+    game("s");
+});
+}
+main();
